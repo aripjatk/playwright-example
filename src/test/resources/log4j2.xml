@@ -1,0 +1,26 @@
+<Configuration status="debug" name="playwright-test-config" packages="">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%date{HH:mm:ss} %level %class{1} %msg%n"/>
+        </Console>
+        <!-- Latest file will be called test_latest.log -->
+        <!-- Other files will be renamed to contain date and time of test execution -->
+        <RollingFile name="file" fileName="logs/test_latest.log" filePattern="logs/test-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss} %level %class %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+        <ReportPortalLog4j2Appender name="reportportal">
+            <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss} %level %class %msg%n"/>
+        </ReportPortalLog4j2Appender>
+    </Appenders>
+    <Loggers>
+        <!-- Logs "debug" and above events to file & Report Portal, "info" and above events to console-->
+        <Root level="debug">
+            <AppenderRef ref="file"/>
+            <AppenderRef ref="reportportal"/>
+            <AppenderRef ref="console" level="info"/>
+        </Root>
+    </Loggers>
+</Configuration>

@@ -19,14 +19,34 @@
 
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.11.0</version>
     </dependency>
     <dependency>
       <groupId>com.microsoft.playwright</groupId>
       <artifactId>playwright</artifactId>
       <version>1.57.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>2.25.3</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>2.25.3</version>
+    </dependency>
+    <dependency>
+        <groupId>com.epam.reportportal</groupId>
+        <artifactId>agent-java-junit5</artifactId>
+        <version>5.5.5</version>
+    </dependency>
+    <dependency>
+        <groupId>com.epam.reportportal</groupId>
+        <artifactId>logger-java-log4j</artifactId>
+        <version>5.4.0</version>
     </dependency>
   </dependencies>
 
@@ -47,8 +67,13 @@
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.1</version>
+          <version>3.5.4</version>
           <configuration>
+            <properties>
+              <configurationParameters>
+                junit.jupiter.extensions.autodetection.enabled = true
+              </configurationParameters>
+            </properties>
             <argLine>--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.nio.charset=ALL-UNNAMED --add-opens java.base/java.lang.ref=ALL-UNNAMED --add-opens java.base/jdk.internal.vm=ALL-UNNAMED</argLine>
           </configuration>
         </plugin>
@@ -74,5 +99,20 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.1</version>
+        <executions>
+          <execution>
+            <id>getClasspathFilenames</id>
+            <goals>
+              <goal>properties</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 </project>
