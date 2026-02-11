@@ -17,7 +17,6 @@ public class GoToProfileStep extends TestStep {
     @Override
     public void execute() {
         var homePage = new HomePage(page);
-        logger.debug("Navigating to profile page");
         homePage.goToProfilePage();
     }
 }

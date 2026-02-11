@@ -20,20 +20,12 @@ public class ValidateCartStep extends TestStep {
 
     @Override
     public void execute() {
-        logger.debug("Opening cart page");
         new ProductPage(page).goToCart();
         var cartPage = new CartPage(page);
-        logger.debug("Attempting to obtain cart item name");
         var actualProductName = cartPage.getCartItemName();
         logger.info("Expected product name: " + expectedProductName);
         logger.info("Actual product name: " + actualProductName);
-        logger.debug("Attempting to remove all items from cart");
-        try {
-            cartPage.removeAllItems();
-        } catch (Throwable t) {
-            logger.warn("Failed to remove all items from the cart. " +
-                "Please do this manually before running the test again.", t);
-        }
+        cartPage.removeAllItems();
         try {
             assertEquals(expectedProductName, actualProductName);
             logger.info("Product name validation successful");

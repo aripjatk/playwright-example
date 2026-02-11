@@ -20,14 +20,7 @@ public class ValidateUserNameStep extends TestStep {
     @Override
     public void execute() {
         var homePage = new HomePage(page);
-        logger.debug("Attempting to obtain logged-in user name");
-        String actualUserName;
-        try {
-            actualUserName = homePage.getLoggedInUserName();
-        } catch(Throwable t) {
-            logger.error("Failed to obtain logged-in user name (user may not be logged in)", t);
-            throw t;
-        }
+        String actualUserName = homePage.getLoggedInUserName();
         logger.info("Expected user name: " + expectedUserName);
         logger.info("Actual user name: " + actualUserName);
         try {

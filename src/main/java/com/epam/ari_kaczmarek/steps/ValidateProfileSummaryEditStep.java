@@ -21,10 +21,8 @@ public class ValidateProfileSummaryEditStep extends TestStep {
     @Override
     public void execute() {
         var editProfilePage = new EditProfilePage(page);
-        logger.debug("Returning to profile page to validate summary");
         editProfilePage.goBackToProfilePage();
         var profilePage = new ProfilePage(page);
-        logger.debug("Attempting to obtain profile summary text");
         String actualSummary = profilePage.getProfileSummaryText();
         logger.info("Expected summary: " + expectedSummary);
         logger.info("Actual summary: " + actualSummary);

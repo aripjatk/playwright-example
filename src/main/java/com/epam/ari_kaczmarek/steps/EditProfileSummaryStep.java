@@ -23,10 +23,8 @@ public class EditProfileSummaryStep extends TestStep {
     @Override
     public void execute() {
         var profilePage = new ProfilePage(page);
-        logger.debug("Opening Edit Profile page");
         profilePage.clickEditProfileButton();
         var editProfilePage = new EditProfilePage(page);
-        logger.debug("Entering new summary: " + newSummary);
         editProfilePage.fillSummaryTextArea(newSummary);
         boolean updatedSuccessfully = false;
         for(int i=0; (!updatedSuccessfully && i<maxAttempts); i++) {
@@ -37,12 +35,8 @@ public class EditProfileSummaryStep extends TestStep {
             // the save button refresh indicates that the save operation is complete
             editProfilePage.waitForSaveButtonRefresh();
             updatedSuccessfully = !editProfilePage.checkForError();
-            if(updatedSuccessfully)
-                logger.debug("No error text found, assuming profile summary updated successfully");
-            else
-                logger.debug("Error updating profile summary");
         }
-        if(updatedSuccessfully) {
+        if(!updatedSuccessfully) {
             String msg = "Failed to update profile after " + maxAttempts + " attempts";
             logger.error(msg);
             fail(msg);
