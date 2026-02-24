@@ -14,7 +14,7 @@ public class ProfileStepDefinitions {
         new GoToProfileStep(getPage()).execute();
     }
 
-    @And("the user edits the profile summary to {string} with {integer} attempts")
+    @And("the user edits the profile summary to {string} with {int} attempts")
     public void editProfileSummary(String summary, int attempts) {
         new EditProfileSummaryStep(getPage(), summary, attempts).execute();
     }
