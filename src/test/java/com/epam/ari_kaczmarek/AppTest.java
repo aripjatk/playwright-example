@@ -12,7 +12,9 @@ import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class AppTest {
 
@@ -42,13 +44,17 @@ public class AppTest {
         page = browser.newPage();
     }
 
-    @Test
-    public void loginTest() {
+    @ParameterizedTest
+    @CsvFileSource(resources = "/credentials.csv", numLinesToSkip = 1)
+    public void loginTest(String username, String password, String displayName) {
         logger.info("Commencing login test");
         try {
             new OpenHomePageStep(page).execute();
-            new LogInStep(page, LOGIN_USERNAME, LOGIN_PASSWORD).execute();
-            new ValidateUserNameStep(page, DISPLAYED_USERNAME).execute();
+            new LogInStep(page, username == null ? LOGIN_USERNAME : username,
+                password == null ? LOGIN_PASSWORD : password).execute();
+            new ValidateUserNameStep(page, 
+                displayName == null ? DISPLAYED_USERNAME : displayName
+            ).execute();
             logger.info("Login test passed");
             ReportPortal.emitLaunchLog("Login test passed.", "INFO", new Date());
         } catch (Throwable t) {
@@ -60,21 +66,20 @@ public class AppTest {
         }
     }
 
-    @Test
-    public void editProfileTest() {
-        logger.info("Commencing edit profile test");
+    @ParameterizedTest
+    @ValueSource(strings = {"My Test Summary", "Test"})
+    public void editProfileTest(String summary) {
+        if(summary == null)
+            summary = "Test Summary";
+        logger.info("Commencing edit profile test with summary: " + summary);
         try {
             new OpenHomePageStep(page).execute();
             new LogInStep(page, LOGIN_USERNAME, LOGIN_PASSWORD).execute();
             new ValidateUserNameStep(page, DISPLAYED_USERNAME).execute();
             new GoToProfileStep(page).execute();
-            var summary1 = "My Test Summary";
-            var summary2 = "Test";
             int updateAttempts = 5;
-            new EditProfileSummaryStep(page, summary1, updateAttempts).execute();
-            new ValidateProfileSummaryEditStep(page, summary1).execute();
-            new EditProfileSummaryStep(page, summary2, updateAttempts).execute();
-            new ValidateProfileSummaryEditStep(page, summary2).execute();
+            new EditProfileSummaryStep(page, summary, updateAttempts).execute();
+            new ValidateProfileSummaryEditStep(page, summary).execute();
             logger.info("Edit profile test passed");
             ReportPortal.emitLaunchLog("Edit profile test passed.", "INFO", new Date());
         } catch (Throwable t) {
@@ -86,11 +91,13 @@ public class AppTest {
         }
     }
 
-    @Test
-    public void addToCartTest() {
-        logger.info("Commencing add to cart test");
+    @ParameterizedTest
+    @ValueSource(strings = {"Red Dead Redemption 2", "Portal"})
+    public void addToCartTest(String productName) {
+        if(productName == null)
+            productName = "Red Dead Redemption 2";
+        logger.info("Commencing add to cart test for product: " + productName);
         try {
-            var productName = "Red Dead Redemption 2";
             new OpenHomePageStep(page).execute();
             new LogInStep(page, LOGIN_USERNAME, LOGIN_PASSWORD).execute();
             new ValidateUserNameStep(page, DISPLAYED_USERNAME).execute();
